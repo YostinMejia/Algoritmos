@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from Comparator import Comparator
-
+# from Comparator import Comparator
+from Exception import IllegalArgumentException
 class IPoint:
 
     def draw(self)->None:
@@ -31,9 +31,14 @@ class IPoint:
 class Point(IPoint):
 
     def __init__(self, x:int, y:int) -> None:
+        if x==None or y == None:
+            raise IllegalArgumentException("El punto no puede tener valores nulos")
         self.x = x
         self.y = y
     
+    def __lt__(self, other):
+        return self.compareTo(other) == -1
+
     def __repr__(self) -> str:
         return f"({self.x},{self.y})"
 
@@ -79,7 +84,39 @@ class Point(IPoint):
         return slope
     
     def slopeOrder(self):
-        compare = Comparator(self)
-        iterator = compare.compareSlope
-        return iterator
+        return Comparator(self).compareSlope
 
+class Comparator:
+
+    def __init__(self, invokingPoint) -> None:
+        self.invokingPoint = invokingPoint
+
+    def compareSlope(self, point1, point2 ):
+        
+        compareSlope1 = self.invokingPoint.slopeTo(point1)
+        compareSlope2 = self.invokingPoint.slopeTo(point2)
+        
+        if compareSlope1 > compareSlope2:
+            return 1
+        elif compareSlope1 < compareSlope2:
+            return -1
+        # Colineales
+        else:
+            return 0
+
+if __name__=="__main__":
+        p = Point(4, 4)
+        p1 = Point(5,5)
+        print(p.compareTo(p1) == -1)
+        print(p1.compareTo(p1) == 0)
+        print(p1.compareTo(p) == 1)
+        
+        # // Test slopeTo method
+        p2 = Point(4,5)
+        p3 = Point(3,4) 
+        
+        # // Test comparator
+        print(p.slopeOrder().compareSlope(p2, p3) == 1)
+        print(p1.slopeOrder().compareSlope(p, p3) == 1)
+        print(p1.slopeOrder().compareSlope(p3, p) == -1)
+        print(p1.slopeOrder().compareSlope(p3, p3) == 0)
