@@ -35,7 +35,7 @@ class Point(IPoint):
             raise IllegalArgumentException("El punto no puede tener valores nulos")
         self.x = x
         self.y = y
-    
+    # Menor que
     def __lt__(self, other):
         return self.compareTo(other) == -1
 
@@ -64,8 +64,13 @@ class Point(IPoint):
 
     def slopeTo(self, that)->float:
         compare = self.compareTo(that)
+
+        # Degenerate line , es decir, tienen coordenadas iguales
+        if compare ==0:
+            # Número mínimio permitido por el lenguaje -2^31
+            slope = -2**31
         # Recta vertical cuando sus "x" son iguales y "y" diferentes
-        if self.x == that.x:
+        elif self.x == that.x:
             # Número máximo permitido por el lenguaje 2^31-1 
             return  2**31-1
         # Recta horizontal cuando sus "y" son iguales y "x" diferentes
@@ -77,10 +82,8 @@ class Point(IPoint):
         # "x" del punto actual es menor a la posición en "x" del punto that
         elif compare == -1 :
             slope = (that.y -self.y) / (that.x - self.x) 
-        # Degenerate line , es decir, tienen coordenadas iguales
-        else:
-            # Número mínimio permitido por el lenguaje -2^31
-            slope = -2**31
+
+
         return slope
     
     def slopeOrder(self):

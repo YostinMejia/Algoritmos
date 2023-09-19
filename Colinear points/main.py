@@ -4,30 +4,32 @@ from random import randint,seed
 from FastCollinearPoints import *
 
 def main():
+    # error 63,78
     points = []
     # prueba #1
-    # seed(6.499999999999993 )
-    # for i in range (100):
+    seed(3.0000000000000004)
+    for _ in range (80):
+        x=round(randint(0,50))
+        y=round(randint(0,50))
+        points.append(Point(x,y))
+    # Prueba #2
+    # seed(5.799999999999995)
+    # for _ in range (50):
     #     x=round(randint(0,30))
     #     y=round(randint(0,30))
     #     points.append(Point(x,y))
-    
-    # Prueba #2
-    seed(5.799999999999995)
-    for _ in range (50):
-        x=round(randint(0,30))
-        y=round(randint(0,30))
-        points.append(Point(x,y))
 
     # Draw the point
     for p in points:
         p.draw() 
 
-    colinear = BruteCollinearPoints(points)
+    # colinear = BruteCollinearPoints(points)
+    colinear = FastCollinearPoints(points)
 
-    # colinear = FastCollinearPoints(points)
-    print(points)
+    # (0,30)->(14,23)->
+    # print(points)
     print(colinear.segments())
+    print(colinear.numberOfSegments())
     # Draw the lines
     for linea in colinear.segments():
         linea.draw()
@@ -46,11 +48,16 @@ def buscarSeed(numLineas, numPuntos, maxX, maxY, minX=0, minY=0):
         try:
             colinear = BruteCollinearPoints(points)
         except:
-            pass
-        cont+=0.1
-        points=[]
+            cont+=0.2
+            points=[]
+            print(cont)
+        
+    print(points)
+    
     return cont
 
 
 if __name__=="__main__":
     main()
+
+    # print(buscarSeed(40,80,50,50))
